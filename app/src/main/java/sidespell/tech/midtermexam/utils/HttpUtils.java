@@ -1,5 +1,7 @@
 package sidespell.tech.midtermexam.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,6 +17,8 @@ import java.net.URL;
  * A utility class that handles all Http related calls and services.
  */
 public class HttpUtils {
+
+
 
     private static final String LOG_TAG = HttpUtils.class.getSimpleName();
 
@@ -99,5 +103,25 @@ public class HttpUtils {
      */
     public static String getResponse(Uri uri, String requestMethod) {
         return getResponse(uri.toString(), requestMethod);
+    }
+    public static Bitmap getImageBitmap(String sUrl) {
+        if (TextUtils.isEmpty(sUrl)) {
+            throw new RuntimeException("Url passed is either null or empty");
+        }
+
+        try {
+            URL url = new URL(sUrl);
+            InputStream inputStream = url.openConnection().getInputStream();
+
+            if (inputStream == null) {
+                return null;
+            }
+
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
